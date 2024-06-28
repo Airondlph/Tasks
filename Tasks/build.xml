@@ -1,0 +1,111 @@
+<project name="Tasks" default="build" basedir=".">
+	<description>Builds, tests, and runs the project: ${ant.project.name}</description>
+
+	<property file="build.properties" />
+
+	<target name="info" depends="">
+		<echo>Builds, tests, and runs the project: ${ant.project.name}</echo>
+		<echo></echo>
+		<echo>Versions:</echo>
+		<echo> - Ant: ${ant.version}</echo>
+	</target>
+	
+	<target name="init" depends="">
+		<tstamp/>
+	</target>
+
+	<target name="clean" depends="init, clean-build, clean-dist, clean-javadoc, clean-test">
+
+	</target>
+
+	<target name="clean-build">
+		<delete dir="${build.dir}" />
+	</target>
+
+	<target name="clean-dist">
+		<delete dir="${dist.dir}" />
+	</target>
+
+	<target name="clean-javadoc">
+		<delete dir="${javadoc.dir}" />
+	</target>
+
+	<target name="build" depends="init, clean-build" >
+		<mkdir dir="${build.dir}" />
+		<javac destdir="${build.dir}" includeantruntime="false" debug="${debug.enable}" debuglevel="${debug.level}">
+			<src path="${src.dir}" />
+			<classpath refid="classpath" />
+		</javac>
+	</target>
+
+	<path id="classpath">
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar"/>
+		</fileset>
+		<pathelement location="${build.dir}"/>
+	</path>
+	
+	<target name="jar" depends="build, clean-dist">
+		<jar destfile="${jar.dir}/${jar.name}.jar"
+		  basedir="${build.dir}"
+		  includes="**/*.class"
+		  excludes="**/*Test*.class">
+			<manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+            </manifest>
+		</jar>
+	</target>
+	
+	<target name="dist" depends="jar">
+		<!--
+		<copy>
+
+		</copy>
+		-->
+	</target>
+
+	<target name="run" depends="dist">
+		<java jar="${jar.dir}/${jar.name}.jar" fork="true"/>
+	</target>
+	
+	<target name="javadoc" depends="build">
+		
+	</target>
+
+	<target name="clean-test" depends="init, clean-test-build, clean-test-dist, clean-test-javadoc">
+		
+	</target>
+
+	<target name="clean-test-build" depends="">
+
+	</target>
+
+	<target name="clean-test-dist" depends="">
+
+	</target>
+
+	<target name="clean-test-javadoc" depends="">
+
+	</target>
+
+	<target name="test-build" depends="init, clean-test-build">
+
+	</target>
+
+	<target name="test-jar" depends="test-build, clean-test-dist">
+
+	</target>
+
+	<target name="test-dist" depends="test-jar">
+
+	</target>
+
+	<target name="test-run" depends="test-dist">
+
+	</target>
+
+	<target name="test-javadoc" depends="test-build">
+
+	</target>
+
+</project>
